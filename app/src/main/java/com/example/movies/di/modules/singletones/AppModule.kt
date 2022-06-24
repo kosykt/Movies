@@ -2,12 +2,12 @@ package com.example.movies.di.modules.singletones
 
 import android.app.Application
 import com.example.data.database.AppDatabase
-import com.example.data.database.DatabaseRepositoryImpl
-import com.example.data.network.NetworkRepositoryImpl
+import com.example.data.database.DatabaseDataSourceImpl
+import com.example.data.network.NetworkDataSourceImpl
 import com.example.data.network.RetrofitService
 import com.example.data.repository.DataSourceRepositoryImpl
-import com.example.data.repository.DatabaseRepository
-import com.example.data.repository.NetworkRepository
+import com.example.data.repository.DatabaseDataSource
+import com.example.data.repository.NetworkDataSource
 import com.example.domain.DataSourceRepository
 import com.example.movies.utils.NetworkObserver
 import com.example.movies.utils.imageloader.AppImageLoader
@@ -39,22 +39,22 @@ class AppModule(private val application: Application) {
 
     @Singleton
     @Provides
-    fun provideNetworkRepository(retrofitService: RetrofitService): NetworkRepository {
-        return NetworkRepositoryImpl(retrofitService)
+    fun provideNetworkDataSource(retrofitService: RetrofitService): NetworkDataSource {
+        return NetworkDataSourceImpl(retrofitService)
     }
 
     @Singleton
     @Provides
-    fun provideDatabaseRepository(db: AppDatabase): DatabaseRepository {
-        return DatabaseRepositoryImpl(db)
+    fun provideDatabaseDataSource(db: AppDatabase): DatabaseDataSource {
+        return DatabaseDataSourceImpl(db)
     }
 
     @Singleton
     @Provides
     fun provideDataSourceRepository(
-        networkRepository: NetworkRepository,
-        databaseRepository: DatabaseRepository,
+        networkDataSource: NetworkDataSource,
+        databaseDataSource: DatabaseDataSource,
     ): DataSourceRepository {
-        return DataSourceRepositoryImpl(networkRepository, databaseRepository)
+        return DataSourceRepositoryImpl(networkDataSource, databaseDataSource)
     }
 }

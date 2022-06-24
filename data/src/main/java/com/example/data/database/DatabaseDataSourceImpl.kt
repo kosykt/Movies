@@ -1,12 +1,12 @@
 package com.example.data.database
 
 import com.example.data.database.model.TopMoviesEntity
-import com.example.data.repository.DatabaseRepository
+import com.example.data.repository.DatabaseDataSource
 import kotlinx.coroutines.flow.Flow
 
-class DatabaseRepositoryImpl(
+class DatabaseDataSourceImpl(
     private val database: AppDatabase
-) : DatabaseRepository {
+) : DatabaseDataSource {
     override suspend fun insert(topMoviesEntity: List<TopMoviesEntity>) {
         database.topMoviesDao().insert(topMoviesEntity)
     }

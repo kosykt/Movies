@@ -1,12 +1,12 @@
 package com.example.data.network
 
 import com.example.data.network.model.TopMoviesDTO
-import com.example.data.repository.NetworkRepository
+import com.example.data.repository.NetworkDataSource
 import retrofit2.Response
 
-class NetworkRepositoryImpl(
+class NetworkDataSourceImpl(
     private val retrofitService: RetrofitService
-): NetworkRepository {
+): NetworkDataSource {
 
     override suspend fun getTop250Movies(): Response<TopMoviesDTO> {
         return retrofitService.getTop250Movies()
