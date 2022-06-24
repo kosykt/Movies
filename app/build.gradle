@@ -41,6 +41,8 @@ dependencies {
     implementation project(Modules.domain)
     implementation project(Modules.data)
 
+    implementation Dependencies.paging_runtime
+
     implementation Dependencies.dagger
     kapt Dependencies.dagger_comp
 

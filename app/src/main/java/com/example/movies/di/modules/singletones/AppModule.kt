@@ -1,9 +1,12 @@
 package com.example.movies.di.modules.singletones
 
 import android.app.Application
+import com.example.data.database.AppDatabase
+import com.example.data.database.DatabaseRepositoryImpl
 import com.example.data.network.NetworkRepositoryImpl
 import com.example.data.network.RetrofitService
 import com.example.data.repository.DataSourceRepositoryImpl
+import com.example.data.repository.DatabaseRepository
 import com.example.data.repository.NetworkRepository
 import com.example.domain.DataSourceRepository
 import com.example.movies.utils.NetworkObserver
@@ -30,10 +33,8 @@ class AppModule(private val application: Application) {
 
     @Singleton
     @Provides
-    fun provideDataSourceRepository(
-        network: NetworkRepository
-    ): DataSourceRepository {
-        return DataSourceRepositoryImpl(network)
+    fun provideAppImageLoader(): AppImageLoader {
+        return CoilImageLoader()
     }
 
     @Singleton
@@ -44,7 +45,16 @@ class AppModule(private val application: Application) {
 
     @Singleton
     @Provides
-    fun provideAppImageLoader(): AppImageLoader {
-        return CoilImageLoader()
+    fun provideDatabaseRepository(db: AppDatabase): DatabaseRepository {
+        return DatabaseRepositoryImpl(db)
+    }
+
+    @Singleton
+    @Provides
+    fun provideDataSourceRepository(
+        networkRepository: NetworkRepository,
+        databaseRepository: DatabaseRepository,
+    ): DataSourceRepository {
+        return DataSourceRepositoryImpl(networkRepository, databaseRepository)
     }
 }

@@ -46,6 +46,8 @@ object Dependencies {
     const val okhttp = "com.squareup.okhttp3:okhttp:4.9.3"
     const val okhttp_logging_interceptor = "com.squareup.okhttp3:logging-interceptor:4.9.3"
 
+    const val paging_runtime = "androidx.paging:paging-runtime:3.1.1"
+
     const val appcompat = "androidx.appcompat:appcompat:1.4.1"
     const val android_material = "com.google.android.material:material:1.6.0"
     const val constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.3"
