@@ -1,6 +1,13 @@
 package com.example.domain.model
 
 data class TopMoviesDomainModel(
-    val errorMessage: String,
-    val items: List<TopMoviesDomainItem>
+    val crew: String,
+    val fullTitle: String,
+    val id: String,
+    val imDbRating: String,
+    val imDbRatingCount: String,
+    val image: String,
+    val rank: String,
+    val title: String,
+    val year: String
 )

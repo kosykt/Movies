@@ -1,18 +1,12 @@
 package com.example.data
 
 import com.example.data.database.model.TopMoviesEntity
-import com.example.data.network.model.TopMoviesDTO
 import com.example.data.network.model.TopMoviesDTOItem
-import com.example.domain.model.TopMoviesDomainItem
 import com.example.domain.model.TopMoviesDomainModel
 
-fun TopMoviesDTO.toTopMoviesDomainModel() = TopMoviesDomainModel(
-    errorMessage = this.errorMessage,
-    items = this.items.toListTopMoviesDomainItem()
-)
 
-fun List<TopMoviesDTOItem>.toListTopMoviesDomainItem() = this.map {
-    TopMoviesDomainItem(
+fun List<TopMoviesDTOItem>.toListTopMoviesDomainModel() = this.map {
+    TopMoviesDomainModel(
         crew = it.crew,
         fullTitle = it.fullTitle,
         id = it.id,
@@ -38,8 +32,3 @@ fun List<TopMoviesDTOItem>.toListTopMoviesEntity() = this.map {
         year = it.year,
     )
 }
-
-fun getErrorTop250Movies() = TopMoviesDomainModel(
-    errorMessage = "ERROR",
-    items = emptyList()
-)

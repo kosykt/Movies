@@ -77,7 +77,7 @@ class Top250MoviesFragment : BaseFragment<FragmentTop250MoviesBinding>() {
     private fun renderData(appState: AppState) {
         when (appState) {
             is AppState.Success<*> -> {
-                refreshAdapter(appState.data as TopMoviesDomainModel)
+                refreshAdapter(appState.data as List<TopMoviesDomainModel>)
                 binding.progressBar.visibility = View.GONE
             }
             is AppState.Loading -> {
@@ -85,10 +85,10 @@ class Top250MoviesFragment : BaseFragment<FragmentTop250MoviesBinding>() {
             }
             is AppState.Error -> {
                 binding.progressBar.visibility = View.GONE
-                Toast.makeText(context, appState.error.message.toString(), Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, appState.error, Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun refreshAdapter(models: TopMoviesDomainModel) = adapter.submitList(models.items)
+    private fun refreshAdapter(models: List<TopMoviesDomainModel>) = adapter.submitList(models)
 }

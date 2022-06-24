@@ -1,16 +1,13 @@
 package com.example.data.database.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.room.*
 import com.example.data.database.model.TopMoviesEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TopMoviesDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(topMoviesEntity: List<TopMoviesEntity>)
 
     @Delete
