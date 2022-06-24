@@ -23,8 +23,6 @@
         android:id="@+id/progress_bar"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:indeterminateDrawable="@drawable/ic_loading_ring"
-        android:indeterminateOnly="true"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
