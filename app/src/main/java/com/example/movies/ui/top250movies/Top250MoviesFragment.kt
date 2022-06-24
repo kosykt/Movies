@@ -78,11 +78,13 @@ class Top250MoviesFragment : BaseFragment<FragmentTop250MoviesBinding>() {
         when (appState) {
             is AppState.Success<*> -> {
                 refreshAdapter(appState.data as TopMoviesDomainModel)
+                binding.progressBar.visibility = View.GONE
             }
             is AppState.Loading -> {
-                Toast.makeText(context, "LOADING", Toast.LENGTH_SHORT).show()
+                binding.progressBar.visibility = View.VISIBLE
             }
             is AppState.Error -> {
+                binding.progressBar.visibility = View.GONE
                 Toast.makeText(context, appState.error.message.toString(), Toast.LENGTH_SHORT).show()
             }
         }
