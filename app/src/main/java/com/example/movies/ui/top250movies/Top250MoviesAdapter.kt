@@ -11,15 +11,17 @@ import com.example.movies.utils.imageloader.AppImageLoader
 
 class Top250MoviesAdapter(
     private val appImageLoader: AppImageLoader,
+    private val navigateToDetailsFragment: (String) -> Unit,
 ) : ListAdapter<TopMoviesDomainModel, Top250MoviesAdapter.Top250MoviesViewHolder>(UsersCallback) {
 
     inner class Top250MoviesViewHolder(private val vb: ItemTop250MoviesBinding) :
         RecyclerView.ViewHolder(vb.root) {
 
         fun show(model: TopMoviesDomainModel) {
-            vb.movieTitle.text = model.title
-            vb.movieRating.text = model.imDbRating
-            appImageLoader.loadInto(model.image, vb.moviePoster)
+            vb.root.setOnClickListener { navigateToDetailsFragment(model.id) }
+            vb.itemTopMovieTitle.text = model.title
+            vb.itemTopMovieRating.text = model.imDbRating
+            appImageLoader.loadInto(model.image, vb.itemTopMoviePoster)
         }
     }
 

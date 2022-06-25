@@ -28,17 +28,6 @@ class Top250MoviesViewModel @Inject constructor(
         }
     }
 
-    private fun checkResponse(response: UseCaseResponse) {
-        when (response){
-            is UseCaseResponse.Error -> {
-                mutableStateFlow.value = AppState.Error(response.message)
-            }
-            is UseCaseResponse.Success<*> -> {
-                mutableStateFlow.value = AppState.Success(response.data)
-            }
-        }
-    }
-
     override fun onCleared() {
         super.onCleared()
         top250MoviesSubcomponentProvider.destroyTop250MoviesSubcomponent()

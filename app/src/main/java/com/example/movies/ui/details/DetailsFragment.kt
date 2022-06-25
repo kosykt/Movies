@@ -1,4 +1,4 @@
-package com.example.movies.ui.top250movies
+package com.example.movies.ui.details
 
 import android.content.Context
 import android.os.Bundle
@@ -9,9 +9,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
-import com.example.domain.model.TopMoviesDomainModel
-import com.example.movies.databinding.FragmentTop250MoviesBinding
+import androidx.navigation.fragment.navArgs
+import com.example.movies.databinding.FragmentDetailsBinding
 import com.example.movies.ui.base.BaseFragment
 import com.example.movies.utils.AppState
 import com.example.movies.utils.NetworkObserver
@@ -21,7 +20,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import javax.inject.Inject
 
-class Top250MoviesFragment : BaseFragment<FragmentTop250MoviesBinding>() {
+class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
 
     @Inject
     lateinit var appImageLoader: AppImageLoader
@@ -31,36 +30,33 @@ class Top250MoviesFragment : BaseFragment<FragmentTop250MoviesBinding>() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    private val viewModel: Top250MoviesViewModel by lazy {
-        ViewModelProvider(this, viewModelFactory)[Top250MoviesViewModel::class.java]
+    private val viewModel: DetailsViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[DetailsViewModel::class.java]
     }
 
-    private val adapter by lazy {
-        Top250MoviesAdapter(
-            appImageLoader = appImageLoader,
-            navigateToDetailsFragment = this::navigateToDetailsFragment,
-        )
-    }
+    private val args by navArgs<DetailsFragmentArgs>()
 
     override fun onAttach(context: Context) {
-        (requireActivity().application as Top250MoviesSubcomponentProvider)
-            .initTop250MoviesSubcomponent()
+        (requireActivity().application as DetailsSubcomponentProvider)
+            .initDetailsSubcomponent()
             .inject(this)
         super.onAttach(context)
     }
 
     override fun getViewBinding(container: ViewGroup?) =
-        FragmentTop250MoviesBinding.inflate(layoutInflater, container, false)
+        FragmentDetailsBinding.inflate(layoutInflater, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.topMoviesRecycler.adapter = adapter
         lifecycleScope.launchWhenCreated {
             networkObserver.networkIsAvailable()
                 .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
                 .distinctUntilChanged()
                 .collectLatest {
-                    viewModel.getTop250Movies(it)
+                    viewModel.getDetails(
+                        isNetworkAvailable = it,
+                        titleId = args.titleId
+                    )
                 }
         }
     }
@@ -69,7 +65,7 @@ class Top250MoviesFragment : BaseFragment<FragmentTop250MoviesBinding>() {
         super.onStart()
         lifecycleScope.launchWhenStarted {
             viewModel.stateFlow
-                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .flowWithLifecycle(lifecycle, Lifecycle.State.CREATED)
                 .distinctUntilChanged()
                 .collectLatest {
                     renderData(it)
@@ -77,28 +73,17 @@ class Top250MoviesFragment : BaseFragment<FragmentTop250MoviesBinding>() {
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
     private fun renderData(appState: AppState) {
-        when (appState) {
+        when(appState){
             is AppState.Success<*> -> {
-                refreshAdapter(appState.data as List<TopMoviesDomainModel>)
-                binding.topMoviesProgressBar.visibility = View.GONE
+                Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
             }
             is AppState.Loading -> {
-                binding.topMoviesProgressBar.visibility = View.VISIBLE
+                Toast.makeText(context, "LOADING", Toast.LENGTH_SHORT).show()
             }
             is AppState.Error -> {
-                binding.topMoviesProgressBar.visibility = View.GONE
                 Toast.makeText(context, appState.error, Toast.LENGTH_SHORT).show()
             }
         }
-    }
-
-    private fun refreshAdapter(models: List<TopMoviesDomainModel>) = adapter.submitList(models)
-
-    private fun navigateToDetailsFragment(titleId: String) {
-        findNavController().navigate(
-            Top250MoviesFragmentDirections.actionTop250MoviesFragmentToDetailsFragment(titleId)
-        )
     }
 }

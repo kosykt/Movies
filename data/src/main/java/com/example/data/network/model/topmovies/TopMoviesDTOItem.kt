@@ -1,4 +1,4 @@
-package com.example.data.network.model
+package com.example.data.network.model.topmovies
 
 data class TopMoviesDTOItem(
     val crew: String,

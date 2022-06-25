@@ -19,4 +19,5 @@ import javax.inject.Singleton
 interface AppComponent {
 
     fun provideTop250MoviesSubcomponent(): Top250MoviesSubcomponent
+    fun provideDetailsSubcomponent(): DetailsSubcomponent
 }

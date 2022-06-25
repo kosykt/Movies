@@ -10,9 +10,6 @@ interface TopMoviesDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(topMoviesEntity: List<TopMoviesEntity>)
 
-    @Delete
-    suspend fun delete(topMoviesEntity: TopMoviesEntity)
-
     @Query("SELECT * FROM TopMoviesEntity")
     fun getAll(): Flow<List<TopMoviesEntity>>
 }
