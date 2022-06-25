@@ -3,24 +3,27 @@ package com.example.data.database
 import com.example.data.database.model.TitleEntity
 import com.example.data.database.model.TopMoviesEntity
 import com.example.data.repository.DatabaseDataSource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 
 class DatabaseDataSourceImpl(
     private val database: AppDatabase
 ) : DatabaseDataSource {
     override suspend fun insertTopMovies(topMoviesEntity: List<TopMoviesEntity>) {
-        database.topMoviesDao().insert(topMoviesEntity)
+        withContext(Dispatchers.IO) { database.topMoviesDao().insert(topMoviesEntity) }
     }
 
     override fun getAllTopMovies(): Flow<List<TopMoviesEntity>> {
-        return database.topMoviesDao().getAll()
+        return database.topMoviesDao().getAll().flowOn(Dispatchers.IO)
     }
 
     override suspend fun insertTitle(titleEntity: TitleEntity) {
-        database.titleDao().insert(titleEntity)
+        withContext(Dispatchers.IO) { database.titleDao().insert(titleEntity) }
     }
 
     override suspend fun getTitleById(titleId: String): TitleEntity {
-        return database.titleDao().getById(titleId)
+        return withContext(Dispatchers.IO) { database.titleDao().getById(titleId) }
     }
 }
