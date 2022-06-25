@@ -13,32 +13,40 @@ class DataSourceRepositoryImpl(
 ) : DataSourceRepository {
     override suspend fun getTop250Movies(): UseCaseResponse {
         val response = networkDataSource.getTop250Movies()
-        return when {
+        when {
             response.isSuccessful && response.body() != null -> {
-                databaseDataSource.insertTopMovies(response.body()!!.items.toListTopMoviesEntity())
-                UseCaseResponse.Success(response.body()!!.items.toListTopMoviesDomainModel())
+                return if (response.body()!!.errorMessage.isEmpty()) {
+                    databaseDataSource.insertTopMovies(response.body()!!.items.toListTopMoviesEntity())
+                    UseCaseResponse.Success(response.body()!!.items.toListTopMoviesDomainModel())
+                } else {
+                    UseCaseResponse.Error(response.body()!!.errorMessage)
+                }
             }
             response.isSuccessful && response.body() == null -> {
-                UseCaseResponse.Error("response is empty")
+                return UseCaseResponse.Error("response is empty")
             }
             else -> {
-                UseCaseResponse.Error("unknown error")
+                return UseCaseResponse.Error("unknown error")
             }
         }
     }
 
     override suspend fun getDetails(titleId: String): UseCaseResponse {
         val response = networkDataSource.getDetails(titleId)
-        return when {
+        when {
             response.isSuccessful && response.body() != null -> {
-                databaseDataSource.insertTitle(response.body()!!.toTitleEntity())
-                UseCaseResponse.Success(response.body()!!.toTitleDomainModel())
+                return if (response.body()!!.errorMessage.isNullOrEmpty()) {
+                    databaseDataSource.insertTitle(response.body()!!.toTitleEntity())
+                    UseCaseResponse.Success(response.body()!!.toTitleDomainModel())
+                } else {
+                    UseCaseResponse.Error(response.body()!!.errorMessage.toString())
+                }
             }
             response.isSuccessful && response.body() == null -> {
-                UseCaseResponse.Error("response is empty")
+                return UseCaseResponse.Error("response is empty")
             }
             else -> {
-                UseCaseResponse.Error("unknown error")
+                return UseCaseResponse.Error("unknown error")
             }
         }
     }
