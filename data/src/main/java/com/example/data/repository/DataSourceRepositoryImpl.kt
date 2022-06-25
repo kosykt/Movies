@@ -3,6 +3,7 @@ package com.example.data.repository
 import com.example.data.toListTopMoviesDomainModel
 import com.example.data.toListTopMoviesEntity
 import com.example.data.toTitleDomainModel
+import com.example.data.toTitleEntity
 import com.example.domain.DataSourceRepository
 import com.example.domain.UseCaseResponse
 
@@ -14,7 +15,7 @@ class DataSourceRepositoryImpl(
         val response = networkDataSource.getTop250Movies()
         return when {
             response.isSuccessful && response.body() != null -> {
-                databaseDataSource.insert(response.body()!!.items.toListTopMoviesEntity())
+                databaseDataSource.insertTopMovies(response.body()!!.items.toListTopMoviesEntity())
                 UseCaseResponse.Success(response.body()!!.items.toListTopMoviesDomainModel())
             }
             response.isSuccessful && response.body() == null -> {
@@ -30,6 +31,7 @@ class DataSourceRepositoryImpl(
         val response = networkDataSource.getDetails(titleId)
         return when {
             response.isSuccessful && response.body() != null -> {
+                databaseDataSource.insertTitle(response.body()!!.toTitleEntity())
                 UseCaseResponse.Success(response.body()!!.toTitleDomainModel())
             }
             response.isSuccessful && response.body() == null -> {

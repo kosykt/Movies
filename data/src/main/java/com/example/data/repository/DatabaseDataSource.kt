@@ -1,10 +1,14 @@
 package com.example.data.repository
 
+import com.example.data.database.model.TitleEntity
 import com.example.data.database.model.TopMoviesEntity
 import kotlinx.coroutines.flow.Flow
 
 interface DatabaseDataSource {
 
-    suspend fun insert(topMoviesEntity: List<TopMoviesEntity>)
-    fun getAll(): Flow<List<TopMoviesEntity>>
+    suspend fun insertTopMovies(topMoviesEntity: List<TopMoviesEntity>)
+    fun getAllTopMovies(): Flow<List<TopMoviesEntity>>
+
+    suspend fun insertTitle(titleEntity: TitleEntity)
+    suspend fun getTitleById(titleId: String): TitleEntity
 }

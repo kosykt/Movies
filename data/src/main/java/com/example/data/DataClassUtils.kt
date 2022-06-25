@@ -1,5 +1,6 @@
 package com.example.data
 
+import com.example.data.database.model.TitleEntity
 import com.example.data.database.model.TopMoviesEntity
 import com.example.data.network.model.title.TitleDTO
 import com.example.data.network.model.topmovies.TopMoviesDTOItem
@@ -36,6 +37,24 @@ fun List<TopMoviesDTOItem>.toListTopMoviesEntity() = this.map {
 }
 
 fun TitleDTO.toTitleDomainModel() = TitleDomainModel(
+    companies = this.companies,
+    directors = this.directors,
+    errorMessage = this.errorMessage,
+    fullTitle = this.fullTitle,
+    genres = this.genres,
+    id = this.id,
+    imDbRating = this.imDbRating,
+    image = this.image,
+    languages = this.languages,
+    plot = this.plot,
+    releaseDate = this.releaseDate,
+    runtimeMins = this.runtimeMins,
+    stars = this.stars,
+    writers = this.writers,
+    year = this.year,
+)
+
+fun TitleDTO.toTitleEntity() = TitleEntity(
     companies = this.companies,
     directors = this.directors,
     errorMessage = this.errorMessage,
