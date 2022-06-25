@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.domain.UseCaseResponse
 import com.example.movies.utils.AppState
-import com.example.movies.utils.CHECK_RESPONSE_TAG
+import com.example.movies.utils.RESPONSE_HANDLER_TAG
 import com.example.movies.utils.COROUTINE_EXCEPTION_HANDLER_TAG
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
@@ -25,11 +25,11 @@ abstract class BaseViewModel : ViewModel() {
         }
     protected val baseViewModelScope = viewModelScope.plus(coroutineContext)
 
-    protected fun checkResponse(response: UseCaseResponse) {
+    protected fun responseHandler(response: UseCaseResponse) {
         when (response) {
             is UseCaseResponse.Error -> {
                 mutableStateFlow.value = AppState.Error(response.message)
-                Log.e(CHECK_RESPONSE_TAG, response.message)
+                Log.e(RESPONSE_HANDLER_TAG, response.message)
             }
             is UseCaseResponse.Success<*> -> {
                 mutableStateFlow.value = AppState.Success(response.data)

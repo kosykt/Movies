@@ -19,7 +19,7 @@ class Top250MoviesViewModel @Inject constructor(
             baseViewModelScope.launch {
                 try {
                     val response: UseCaseResponse = getTop250MoviesUseCase.execute()
-                    checkResponse(response)
+                    responseHandler(response)
                 } catch (e: Exception) {
                     mutableStateFlow.value = AppState.Error(e.message.toString())
                     Log.e(TOP_250_MOVIES_VIEW_MODEL_TAG, e.message.toString())

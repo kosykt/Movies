@@ -2,7 +2,6 @@ package com.example.movies.ui.details
 
 import android.util.Log
 import com.example.domain.GetDetailsUseCse
-import com.example.domain.UseCaseResponse
 import com.example.movies.ui.base.BaseViewModel
 import com.example.movies.utils.AppState
 import com.example.movies.utils.DETAILS_VIEW_MODEL_TAG
@@ -19,7 +18,7 @@ class DetailsViewModel @Inject constructor(
             baseViewModelScope.launch {
                 try {
                     val response = getDetailsUseCse.execute(titleId)
-                    checkResponse(response)
+                    responseHandler(response)
                 } catch (e: Exception) {
                     mutableStateFlow.value = AppState.Error(e.message.toString())
                     Log.e(DETAILS_VIEW_MODEL_TAG, e.message.toString())

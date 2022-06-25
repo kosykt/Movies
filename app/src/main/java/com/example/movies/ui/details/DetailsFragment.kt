@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
+import com.example.domain.model.TitleDomainModel
 import com.example.movies.databinding.FragmentDetailsBinding
 import com.example.movies.ui.base.BaseFragment
 import com.example.movies.utils.AppState
@@ -73,16 +74,42 @@ class DetailsFragment : BaseFragment<FragmentDetailsBinding>() {
         }
     }
 
+    @Suppress("UNCHECKED_CAST")
     private fun renderData(appState: AppState) {
-        when(appState){
+        when (appState) {
             is AppState.Success<*> -> {
-                Toast.makeText(context, "Success", Toast.LENGTH_SHORT).show()
+                val data = appState.data as TitleDomainModel
+                with(binding) {
+                    detailsTitle.text = data.fullTitle
+                    detailsDirector.text = data.directors
+                    appImageLoader.loadInto(data.image, detailsPoster)
+                    detailsShortDescriptions.text = data.plot
+                    setActors(data.stars.split(","))
+                }
+                binding.detailsProgressBar.visibility = View.GONE
             }
             is AppState.Loading -> {
-                Toast.makeText(context, "LOADING", Toast.LENGTH_SHORT).show()
+                binding.detailsProgressBar.visibility = View.VISIBLE
             }
             is AppState.Error -> {
+                binding.detailsProgressBar.visibility = View.GONE
                 Toast.makeText(context, appState.error, Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun setActors(actors: List<String>) {
+        val listActorsPosition = listOf(
+            binding.detailsActor1,
+            binding.detailsActor2,
+            binding.detailsActor3,
+            binding.detailsActor4,
+        )
+        for (i in actors.indices) {
+            listActorsPosition[i].text = actors[i]
+            listActorsPosition[i].visibility = View.VISIBLE
+            if (i == listActorsPosition.size) {
+                break
             }
         }
     }
