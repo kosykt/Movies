@@ -39,10 +39,12 @@ class DataSourceRepositoryImpl(
                 getDetailsFromNetworkAndCache(titleId)
             } else {
                 try {
-                    UseCaseResponse.Success(databaseDataSource.getTitleById(titleId).toTitleDomainModel())
-                }catch (e: NullPointerException){
+                    UseCaseResponse.Success(
+                        databaseDataSource.getTitleById(titleId).toTitleDomainModel()
+                    )
+                } catch (e: NullPointerException) {
                     UseCaseResponse.Error("Network and database is now available")
-                }catch (e: Exception){
+                } catch (e: Exception) {
                     UseCaseResponse.Error(e.message.toString())
                 }
             }
@@ -52,11 +54,11 @@ class DataSourceRepositoryImpl(
     }
 
     private suspend fun getDetailsFromNetworkAndCache(titleId: String): UseCaseResponse {
-        try {
+        return try {
             val response = networkDataSource.getDetails(titleId)
             when {
                 response.isSuccessful && response.body() != null -> {
-                    return if (response.body()!!.errorMessage.isNullOrEmpty()) {
+                    if (response.body()!!.errorMessage.isNullOrEmpty()) {
                         databaseDataSource.insertTitle(response.body()!!.toTitleEntity())
                         UseCaseResponse.Success(response.body()!!.toTitleDomainModel())
                     } else {
@@ -64,23 +66,23 @@ class DataSourceRepositoryImpl(
                     }
                 }
                 response.isSuccessful && response.body() == null -> {
-                    return UseCaseResponse.Error("response is empty")
+                    UseCaseResponse.Error("response is empty")
                 }
                 else -> {
-                    return UseCaseResponse.Error("unknown error")
+                    UseCaseResponse.Error("unknown error")
                 }
             }
         } catch (e: Exception) {
-            return UseCaseResponse.Error(e.message.toString())
+            UseCaseResponse.Error(e.message.toString())
         }
     }
 
     private suspend fun getTopMoviesFromNetworkAndCache(): UseCaseResponse {
-        try {
+        return try {
             val response = networkDataSource.getTop250Movies()
             when {
                 response.isSuccessful && response.body() != null -> {
-                    return if (response.body()!!.errorMessage.isEmpty()) {
+                    if (response.body()!!.errorMessage.isEmpty()) {
                         databaseDataSource.insertTopMovies(response.body()!!.items.toListTopMoviesEntity())
                         UseCaseResponse.Success(response.body()!!.items.toListTopMoviesDomainModel())
                     } else {
@@ -88,14 +90,14 @@ class DataSourceRepositoryImpl(
                     }
                 }
                 response.isSuccessful && response.body() == null -> {
-                    return UseCaseResponse.Error("response is empty")
+                    UseCaseResponse.Error("response is empty")
                 }
                 else -> {
-                    return UseCaseResponse.Error("unknown error")
+                    UseCaseResponse.Error("unknown error")
                 }
             }
         } catch (e: Exception) {
-            return UseCaseResponse.Error(e.message.toString())
+            UseCaseResponse.Error(e.message.toString())
         }
     }
 }
