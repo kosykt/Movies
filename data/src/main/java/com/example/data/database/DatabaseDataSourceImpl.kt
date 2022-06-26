@@ -15,8 +15,8 @@ class DatabaseDataSourceImpl(
         withContext(Dispatchers.IO) { database.topMoviesDao().insert(topMoviesEntity) }
     }
 
-    override fun getAllTopMovies(): Flow<List<TopMoviesEntity>> {
-        return database.topMoviesDao().getAll().flowOn(Dispatchers.IO)
+    override suspend fun getAllTopMovies(): List<TopMoviesEntity> {
+        return database.topMoviesDao().getAll()
     }
 
     override suspend fun insertTitle(titleEntity: TitleEntity) {

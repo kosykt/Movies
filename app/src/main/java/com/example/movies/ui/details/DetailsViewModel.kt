@@ -14,15 +14,13 @@ class DetailsViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     fun getDetails(isNetworkAvailable: Boolean, titleId: String) {
-        if (isNetworkAvailable) {
-            baseViewModelScope.launch {
-                try {
-                    val response = getDetailsUseCse.execute(titleId)
-                    responseHandler(response)
-                } catch (e: Exception) {
-                    mutableStateFlow.value = AppState.Error(e.message.toString())
-                    Log.e(DETAILS_VIEW_MODEL_TAG, e.message.toString())
-                }
+        baseViewModelScope.launch {
+            try {
+                val response = getDetailsUseCse.execute(isNetworkAvailable, titleId)
+                responseHandler(response)
+            } catch (e: Exception) {
+                mutableStateFlow.value = AppState.Error(e.message.toString())
+                Log.e(DETAILS_VIEW_MODEL_TAG, e.message.toString())
             }
         }
     }

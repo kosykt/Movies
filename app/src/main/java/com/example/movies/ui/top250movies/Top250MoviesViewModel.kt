@@ -15,15 +15,13 @@ class Top250MoviesViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     fun getTop250Movies(isNetworkAvailable: Boolean) {
-        if (isNetworkAvailable) {
-            baseViewModelScope.launch {
-                try {
-                    val response: UseCaseResponse = getTop250MoviesUseCase.execute()
-                    responseHandler(response)
-                } catch (e: Exception) {
-                    mutableStateFlow.value = AppState.Error(e.message.toString())
-                    Log.e(TOP_250_MOVIES_VIEW_MODEL_TAG, e.message.toString())
-                }
+        baseViewModelScope.launch {
+            try {
+                val response: UseCaseResponse = getTop250MoviesUseCase.execute(isNetworkAvailable)
+                responseHandler(response)
+            } catch (e: Exception) {
+                mutableStateFlow.value = AppState.Error(e.message.toString())
+                Log.e(TOP_250_MOVIES_VIEW_MODEL_TAG, e.message.toString())
             }
         }
     }

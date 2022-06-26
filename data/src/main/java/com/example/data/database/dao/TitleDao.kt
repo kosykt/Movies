@@ -9,9 +9,6 @@ interface TitleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(titleEntity: TitleEntity)
 
-    @Delete
-    suspend fun delete(titleEntity: TitleEntity)
-
     @Query("SELECT * FROM TitleEntity WHERE id = :titleId")
     suspend fun getById(titleId: String): TitleEntity
 }

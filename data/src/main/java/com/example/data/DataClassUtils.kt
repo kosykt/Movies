@@ -22,6 +22,21 @@ fun List<TopMoviesDTOItem>.toListTopMoviesDomainModel() = this.map {
     )
 }
 
+@JvmName("toListTopMoviesDomainModelTopMoviesEntity")
+fun List<TopMoviesEntity>.toListTopMoviesDomainModel() = this.map {
+    TopMoviesDomainModel(
+        crew = it.crew,
+        fullTitle = it.fullTitle,
+        id = it.id,
+        imDbRating = it.imDbRating,
+        imDbRatingCount = it.imDbRatingCount,
+        image = it.image,
+        rank = it.rank,
+        title = it.title,
+        year = it.year,
+    )
+}
+
 fun List<TopMoviesDTOItem>.toListTopMoviesEntity() = this.map {
     TopMoviesEntity(
         crew = it.crew,
@@ -37,6 +52,24 @@ fun List<TopMoviesDTOItem>.toListTopMoviesEntity() = this.map {
 }
 
 fun TitleDTO.toTitleDomainModel() = TitleDomainModel(
+    companies = this.companies,
+    directors = this.directors,
+    errorMessage = this.errorMessage,
+    fullTitle = this.fullTitle,
+    genres = this.genres,
+    id = this.id,
+    imDbRating = this.imDbRating,
+    image = this.image,
+    languages = this.languages,
+    plot = this.plot,
+    releaseDate = this.releaseDate,
+    runtimeMins = this.runtimeMins,
+    stars = this.stars,
+    writers = this.writers,
+    year = this.year,
+)
+
+fun TitleEntity.toTitleDomainModel() = TitleDomainModel(
     companies = this.companies,
     directors = this.directors,
     errorMessage = this.errorMessage,

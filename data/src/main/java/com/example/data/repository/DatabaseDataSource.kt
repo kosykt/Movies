@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface DatabaseDataSource {
 
     suspend fun insertTopMovies(topMoviesEntity: List<TopMoviesEntity>)
-    fun getAllTopMovies(): Flow<List<TopMoviesEntity>>
+    suspend fun getAllTopMovies(): List<TopMoviesEntity>
 
     suspend fun insertTitle(titleEntity: TitleEntity)
     suspend fun getTitleById(titleId: String): TitleEntity
